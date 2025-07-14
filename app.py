@@ -171,6 +171,9 @@ def login():
     data=json_data["assignment_collection"]
     l=len(data)
     assig=""
+    site="https://panda.ecs.kyoto-u.ac.jp/direct/user/current.json"
+    studentnamej=get_course_name(site)
+    studentname=studentnamej["displayName"]
     #print("未提出の課題一覧")
     for i in range (0,l):
         if (data[i]["status"]=="OPEN") and ((data[i]["submissions"]== None) or (data[i]["submissions"][0]["userSubmission"]== False)):
@@ -188,11 +191,14 @@ def login():
             mi=int((rem-da*86400-ho*3600)//60)
             se=int(rem % 60)
             due_data=("提出期限まで：残り"+str(da)+"日"+str(ho)+"時間"+str(mi)+"分"+str(se)+"秒")
-            out_data="\n<h2>"+course_name+"</h2>\n<h3>"+assig_name+"</h3>\n<h3>"+due_data+"</h3>"
+            out_data="\n<h4>"+course_name+"</h4>\n<h5>"+assig_name+"</h5>\n<h5>"+due_data+"</h5>"
             assig=assig+out_data
             
 
     driver.quit()
     print(assig)
     assig="<div>\n"+assig+"\n</div>"
-    return render_template('test.html',result=assig)
+    return render_template('test.html',result=assig,username=studentname)
+
+if __name__ == "__main__":
+    app.run(debug=True)

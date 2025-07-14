@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css')}}">
+</head>
+<body>
+    <h1>GoKULACPandA＋</h1>
+    <p>{{username}}さんのマイページ</p>
+    <h2>未提出課題</h2>
+    <h3>24時間以内</h3>
+    {{result | safe}}
+    <h3>5日以内</h3>
+    <h4></h4>
+    <h3>14日以内</h3>
+    <h4></h4>
+</body>
+</html>

@@ -1,0 +1,54 @@
+body {
+  font-family: 'Segoe UI', 'Yu Gothic', sans-serif;
+  background-color: #F8F9FA;
+  color: #333;
+  margin: 40px;
+  line-height: 1.6;
+}
+h1 {
+  font-size: 2.4em;
+  color: #2C3E50;
+  margin-bottom: 10px;
+  border-bottom: 3px solid #2C3E50;
+  padding-bottom: 8px;
+}
+p {
+  font-size: 1.2em;
+  margin-bottom: 30px;
+  color: #555;
+}
+h2 {
+  font-size: 1.6em;
+  color: #0066CC;
+  margin-bottom: 15px;
+  border-bottom: 2px solid #0066CC;
+  padding-bottom: 6px;
+}
+h3 {
+  font-size: 1.4em;
+  margin-top: 30px;
+  margin-bottom: 10px;
+  padding: 8px;
+  border-radius: 4px;
+}
+h4 {
+  background-color: #FFFFFF;
+  padding: 10px 15px;
+  margin: 5px 0 15px 15px;
+  border-left: 5px solid #ccc;
+  border-radius: 4px;
+  box-shadow: 0 0 5px rgba(0,0,0,0.05);
+}
+/* 締切別カラー強調 */
+h3:contains("24時間以内") {
+  background-color: #FFE4E4;
+  color: #B30000;
+}
+h3:contains("5日以内") {
+  background-color: #FFF4CC;
+  color: #CC6600;
+}
+h3:contains("14日以内") {
+  background-color: #E6F7FF;
+  color: #0066CC;
+}
