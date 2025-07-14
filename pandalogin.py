@@ -69,7 +69,7 @@ def get_panda_site_json(username, password):
             print(f"ログイン後のURL: {driver.current_url}")
             if "login" in driver.current_url:
                 print("ログインに失敗した可能性があります。ユーザー名またはパスワードを確認してください。")
-                return None
+                return 401
             print("ログインに成功しました。")
 
         except TimeoutException:
@@ -102,13 +102,13 @@ def get_panda_site_json(username, password):
             json_text = pre_element.text
         except TimeoutException:
             # preタグがない場合は、bodyのテキストを直接取得を試みる
-            print("preタグが見つかりませんでした。bodyのテキストを直接解析を試みます。")
+            # print("preタグが見つかりませんでした。bodyのテキストを直接解析を試みます。")
             json_text = driver.find_element(By.TAG_NAME, "body").text
             
         # JSON文字列をPythonの辞書に変換
         try:
             data = json.loads(json_text)
-            print("JSONデータを正常に取得し、解析しました。")
+            # print("JSONデータを正常に取得し、解析しました。")
             return data
         except json.JSONDecodeError as e:
             print(f"JSONデータの解析に失敗しました: {e}")
@@ -118,15 +118,15 @@ def get_panda_site_json(username, password):
 
     except TimeoutException:
         print("タイムアウトエラー: ページの要素が見つかるか、操作が完了するまでに時間がかかりすぎました。")
-        return None
+        return 404
     except Exception as e:
         print(f"予期せぬエラーが発生しました: {e}")
-        return None
+        return 999
     
     
 def get_course_name(id):
     driver.get(id)
-    json_data=driver.find_element(By.TAG_NAME, "title").text
+    json_data=driver.find_element(By.TAG_NAME, "body").text
     data = json.loads(json_data)
     return data
 
@@ -164,7 +164,7 @@ def login():
             sid=str(data[i]["context"])
             site="https://panda.ecs.kyoto-u.ac.jp/direct/site/"+sid+".json"
             namej=get_course_name(site)
-            name=namej["description"]
+            name=namej["title"]
             course_name=("コース名："+name)
             assig_name=("課題名："+data[i]["title"])
             tl=int(data[i]["dueTime"]["epochSecond"])

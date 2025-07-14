@@ -8,9 +8,7 @@ from selenium.common.exceptions import TimeoutException, NoSuchElementException
 import json
 import time # デバッグのために一時停止するために使用
 
-options = webdriver.ChromeOptions()
-options.add_argument("--headless")
-driver = webdriver.Chrome(options=options)
+
 app = Flask(__name__)
 
 def get_panda_site_json(username, password):
@@ -141,16 +139,29 @@ def quit_brouse():
 
     print("--- PandA JSONデータ取得開始 ---")
     
-
-    
+opendriver=0
 
 #ホームページ
 @app.route('/')
 def index():
+    global opendriver
+    if opendriver==0:
+        options = webdriver.ChromeOptions()
+        options.add_argument("--headless")
+        global driver
+        driver = webdriver.Chrome(options=options)
+        opendriver=1
     return render_template('index.html')
 
 @app.route('/test',methods=['POST'])
 def login():
+    global opendriver
+    if opendriver==0:
+        options = webdriver.ChromeOptions()
+        options.add_argument("--headless")
+        global driver
+        driver = webdriver.Chrome(options=options)
+        opendriver=1
     out_data=""
     username=request.form['username']
     password=request.form['password']
@@ -177,8 +188,11 @@ def login():
             mi=int((rem-da*86400-ho*3600)//60)
             se=int(rem % 60)
             due_data=("提出期限まで：残り"+str(da)+"日"+str(ho)+"時間"+str(mi)+"分"+str(se)+"秒")
-            out_data=out_data+"\n<h2>"+course_name+"</h2>"+"\n<h3>"+assig_name+"</h3>"+"\n<h3>"+due_data+"</h3>"
+            out_data="\n<h2>"+course_name+"</h2>\n<h3>"+assig_name+"</h3>\n<h3>"+due_data+"</h3>"
             assig=assig+out_data
+            
 
     driver.quit()
+    print(assig)
+    assig="<div>\n"+assig+"\n</div>"
     return render_template('test.html',result=assig)
