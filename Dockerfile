@@ -16,7 +16,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY . .
 
 # ポートの公開
-EXPOSE 8080
+EXPOSE 5000
 
 # 必要なシステムパッケージをインストール
 # curl, wget, unzip はWebDriverのダウンロードと解凍に必要
