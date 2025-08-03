@@ -22,41 +22,41 @@ EXPOSE 5000
 # curl, wget, unzip はWebDriverのダウンロードと解凍に必要
 # jq はChromeDriverの最新版URLをプログラム的に取得する際に便利
 # Google Chromeが動作するために必要なライブラリもインストール
-RUN apt-get update && apt-get install -y --no-install-recommends \
-    curl \
-    wget \
-    unzip \
-    jq \
+# RUN apt-get update && apt-get install -y --no-install-recommends \
+#    curl \
+#    wget \
+#    unzip \
+#    jq \
     # Google Chromeの依存関係
-    libnss3 \
-    libxss1 \
-    libappindicator3-1 \
-    fonts-liberation \
-    libasound2 \
-    libatk-bridge2.0-0 \
-    libatk1.0-0 \
-    libcairo2 \
-    libcups2 \
-    libdbus-1-3 \
-    libdrm2 \
-    libegl1 \
-    libgbm1 \
-    libgdk-pixbuf2.0-0 \
-    libgl1 \
-    libnspr4 \
-    libnss3 \
-    libxcomposite1 \
-    libxdamage1 \
-    libxext6 \
-    libxfixes3 \
-    libxkbcommon0 \
-    libxrandr2 \
-    libxshmfence6 \
-    libxtst6 \
-    xdg-utils \
+#    libnss3 \
+#    libxss1 \
+#    libappindicator3-1 \
+#    fonts-liberation \
+#    libasound2 \
+#    libatk-bridge2.0-0 \
+#    libatk1.0-0 \
+#    libcairo2 \
+#    libcups2 \
+#    libdbus-1-3 \
+#    libdrm2 \
+#   libegl1 \
+#    libgbm1 \
+#    libgdk-pixbuf2.0-0 \
+#    libgl1 \
+#    libnspr4 \
+#    libnss3 \
+#    libxcomposite1 \
+#    libxdamage1 \
+#    libxext6 \
+#    libxfixes3 \
+#    libxkbcommon0 \
+#    libxrandr2 \
+#    libxshmfence6 \
+#    libxtst6 \
+#    xdg-utils \
     # その他の基本的なビルドツールなど（必要であれば）
-    build-essential \
-    && rm -rf /var/lib/apt/lists/*
+#    build-essential \
+#    && rm -rf /var/lib/apt/lists/*
 
 # Google Chrome（ブラウザ本体）をインストール
 # 最新版の安定版Chromeをインストールするための公式リリポジトリを追加
