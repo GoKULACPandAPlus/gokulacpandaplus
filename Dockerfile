@@ -76,7 +76,7 @@ RUN CHROME_VERSION=$(google-chrome --version | grep -oP '\d+\.\d+\.\d+\.\d+') \
     && wget -q --continue -P /tmp/ "${CHROMEDRIVER_URL}" \
     && unzip "/tmp/$(basename "${CHROMEDRIVER_URL}")" -d /tmp/ \
     && mv /tmp/chromedriver-linux64/chromedriver /usr/local/bin/chromedriver \
-    && chmod +x /usr/local/bin/chromedriver \
+    # && chmod +x /usr/local/bin/chromedriver \
     && echo "ChromeDriver installed to /usr/local/bin/chromedriver"
 
 # コンテナ起動時のコマンド (Gunicorn を使用)
