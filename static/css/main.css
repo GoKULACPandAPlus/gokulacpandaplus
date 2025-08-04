@@ -31,24 +31,43 @@ h3 {
   padding: 8px;
   border-radius: 4px;
 }
+
+h3.gorilla {
+  background-color: #00205E;
+  color: #FFFFFF;
+}
+/* 締切別カラー強調用のクラスを定義 */
+.red h3 {
+  background-color: #FFE4E4;
+  color: #B30000;
+}
+
+.yellow h3 {
+  background-color: #FFF4CC;
+  color: #CC6600;
+}
+
+.green h3 {
+  background-color: #E6F7FF;
+  color: #28c758;
+}
 h4 {
-  background-color: #FFFFFF;
+  
   padding: 10px 15px;
   margin: 5px 0 15px 15px;
   border-left: 5px solid #ccc;
   border-radius: 4px;
   box-shadow: 0 0 5px rgba(0,0,0,0.05);
 }
-/* 締切別カラー強調 */
-h3:contains("24時間以内") {
-  background-color: #FFE4E4;
-  color: #B30000;
+
+.red h4{
+  background-color: #ffe5e5;
 }
-h3:contains("5日以内") {
-  background-color: #FFF4CC;
-  color: #CC6600;
+
+.yellow h4{
+  background-color: #fcfcdb;
 }
-h3:contains("14日以内") {
-  background-color: #E6F7FF;
-  color: #0066CC;
+
+.green h4{
+  background-color: #e4ffde;
 }

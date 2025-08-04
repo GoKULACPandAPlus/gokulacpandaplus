@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css')}}">
+</head>
+<body>
+    <h1>GoKULACPandA＋</h1>
+    <p>{{username}}さんのマイページ</p>
+    <h2>GORILLAリマインダ</h2>
+    <h3 class="gorilla">
+      通例ユニットの締め切りまであと<span style="font-size:300%;"><b>{{reminder}}</b></span>日です。Unit Passedの確認を！
+    </h3>
+    <h2>未提出課題</h2>
+    <div class="red">
+    <h3>24時間以内</h3>
+    {{red | safe}}
+    </div>
+    <div class="yellow">
+    <h3>5日以内</h3>
+    {{yellow | safe}}
+    </div>
+    <div class="green">
+    <h3>14日以内</h3>
+    {{green | safe}}
+    </div>
+
+    <h2>今日の格言</h2>
+    <h3>{{proverb}}</h3>
+</body>
+</html>

@@ -7,6 +7,10 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import TimeoutException, NoSuchElementException
 import json
 import time # デバッグのために一時停止するために使用
+import os
+from dotenv import load_dotenv
+import chatgpt
+from datetime import date
 
 
 app = Flask(__name__)
@@ -153,7 +157,7 @@ def index():
         opendriver=1
     return render_template('index.html')
 
-@app.route('/test',methods=['POST'])
+@app.route('/login',methods=['POST'])
 def login():
     global opendriver
     if opendriver==0:
@@ -167,21 +171,34 @@ def login():
     password=request.form['password']
     json_data = get_panda_site_json(username,password)
     if json_data==None :
-        return render_template('test.html',result=999)
+        return render_template('error.html')
     data=json_data["assignment_collection"]
     l=len(data)
     assig=""
     site="https://panda.ecs.kyoto-u.ac.jp/direct/user/current.json"
     studentnamej=get_course_name(site)
     studentname=studentnamej["displayName"]
+
+    #リストとその中に辞書の作成
+    assig_list=[{"remain":float('inf'),"data": ""}]
+    reminder=0
+
     #print("未提出の課題一覧")
     for i in range (0,l):
+        sid=str(data[i]["context"])
+        site="https://panda.ecs.kyoto-u.ac.jp/direct/site/"+sid+".json"
+        namej=get_course_name(site)
+        name=namej["title"]
+        if "ライティング" in name :
+            if "月" in name : xingqi=0
+            if "火" in name : xingqi=1
+            if "水" in name : xingqi=2
+            if "木" in name : xingqi=3
+            if "金" in name : xingqi=4
+            today_xingqi = date.today().weekday()
+            reminder=(7+xingqi-today_xingqi)%7
+
         if (data[i]["status"]=="OPEN") and ((data[i]["submissions"]== None) or (data[i]["submissions"][0]["userSubmission"]== False)):
-            sid=str(data[i]["context"])
-            print (sid)
-            site="https://panda.ecs.kyoto-u.ac.jp/direct/site/"+sid+".json"
-            namej=get_course_name(site)
-            name=namej["title"]
             course_name=("コース名："+name)
             assig_name=("課題名："+data[i]["title"])
             tl=int(data[i]["dueTime"]["epochSecond"])
@@ -193,12 +210,35 @@ def login():
             due_data=("提出期限まで：残り"+str(da)+"日"+str(ho)+"時間"+str(mi)+"分"+str(se)+"秒")
             out_data="\n<h4>"+course_name+"</h4>\n<h5>"+assig_name+"</h5>\n<h5>"+due_data+"</h5>"
             assig=assig+out_data
-            
+
+            #assig_listへの追加
+            for j in range(0,len(assig_list)) :
+                if rem<assig_list[j]["remain"] :
+                    assig_list.insert(j,{"remain": rem, "data": out_data})
+                    break
 
     driver.quit()
-    print(assig)
-    assig="<div>\n"+assig+"\n</div>"
-    return render_template('test.html',result=assig,username=studentname)
+
+    red=""
+    yellow=""
+    green=""
+    #返し
+    for i in range(0,len(assig_list)):
+        if assig_list[i]["remain"]<=86400 :   
+            red=red+assig_list[i]["data"]
+        elif assig_list[i]["remain"]<=432000 :
+            yellow=yellow+assig_list[i]["data"]
+        elif assig_list[i]["remain"]<=1209600 :
+            green=green+assig_list[i]["data"]
+    
+    #格言
+    load_dotenv(".env")
+    chatbot = chatgpt.ChatBot(api_key = os.environ.get("OPENAI_API_KEY"))
+    prompt = "偉人の英語の格言を１つ選び「（英語の格言）（格言の和訳）（作者）」の形式で教えてください"
+    proverb = chatbot.chat(prompt)
+    
+
+    return render_template('main.html',reminder=reminder,red=red,yellow=yellow,green=green,username=studentname,proverb=proverb)
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(host='0.0.0.0',port='5000')
