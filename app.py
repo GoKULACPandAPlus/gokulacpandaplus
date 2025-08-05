@@ -173,30 +173,41 @@ def login():
     if json_data==None :
         return render_template('error.html')
     data=json_data["assignment_collection"]
-    l=len(data)
+    reminder=0
     assig=""
     site="https://panda.ecs.kyoto-u.ac.jp/direct/user/current.json"
     studentnamej=get_course_name(site)
     studentname=studentnamej["displayName"]
+    site="https://panda.ecs.kyoto-u.ac.jp/direct/site.json"
+    site_data=get_course_name(site)
+    l=len(site_data["site_collection"])
+    for i in range (0,l):
+        namej=site_data["site_collection"][i]
+        name=namej["title"]
+        print(name)
+        if ("ライティング" in name) :
+            if ("月" in name) : xingqi=0
+            if ("火" in name) : xingqi=1
+            if ("水" in name) : xingqi=2
+            if ("木" in name) : xingqi=3
+            if ("金" in name) : xingqi=4
+            today_xingqi = date.today().weekday()
+            reminder=(7+xingqi-today_xingqi)%7
+            break
 
     #リストとその中に辞書の作成
     assig_list=[{"remain":float('inf'),"data": ""}]
-    reminder=0
-
+    
+    l=len(data)
     #print("未提出の課題一覧")
     for i in range (0,l):
+        
         sid=str(data[i]["context"])
         site="https://panda.ecs.kyoto-u.ac.jp/direct/site/"+sid+".json"
         namej=get_course_name(site)
         name=namej["title"]
-        if "ライティング" in name :
-            if "月" in name : xingqi=0
-            if "火" in name : xingqi=1
-            if "水" in name : xingqi=2
-            if "木" in name : xingqi=3
-            if "金" in name : xingqi=4
-            today_xingqi = date.today().weekday()
-            reminder=(7+xingqi-today_xingqi)%7
+        print(name)
+        
 
         if (data[i]["status"]=="OPEN") and ((data[i]["submissions"]== None) or (data[i]["submissions"][0]["userSubmission"]== False)):
             course_name=("コース名："+name)
@@ -236,7 +247,6 @@ def login():
     chatbot = chatgpt.ChatBot(api_key = os.environ.get("OPENAI_API_KEY"))
     prompt = "偉人の英語の格言を１つ選び「（英語の格言）（格言の和訳）（作者）」の形式で教えてください"
     proverb = chatbot.chat(prompt)
-    
 
     return render_template('main.html',reminder=reminder,red=red,yellow=yellow,green=green,username=studentname,proverb=proverb)
 
